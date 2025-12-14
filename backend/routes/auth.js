@@ -48,8 +48,8 @@ router.post('/signup', async (req, res) => {
     // Set HTTP-only cookie
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: true,
+      sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
     });
 
@@ -113,8 +113,8 @@ router.post('/login', async (req, res) => {
     // Set HTTP-only cookie
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: true,
+      sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
     });
 
@@ -348,11 +348,13 @@ router.get('/google/callback', (req, res, next) => {
   passport.authenticate('google', { session: false }, (err, user, info) => {
     if (err) {
       console.error('Google OAuth error:', err);
-      return res.redirect('http://localhost:3000/login?error=oauth_error');
+      const frontendURL = process.env.FRONTEND_URL || 'http://localhost:3000';
+      return res.redirect(`${frontendURL}/login?error=oauth_error`);
     }
     if (!user) {
       console.error('Google OAuth failed - no user:', info);
-      return res.redirect('http://localhost:3000/login?error=oauth_failed');
+      const frontendURL = process.env.FRONTEND_URL || 'http://localhost:3000';
+      return res.redirect(`${frontendURL}/login?error=oauth_failed`);
     }
 
     try {
@@ -362,24 +364,26 @@ router.get('/google/callback', (req, res, next) => {
       // Set HTTP-only cookie
       res.cookie('token', token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        secure: true,
+        sameSite: 'none',
         maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
       });
 
       // Set a client-readable cookie for middleware
       res.cookie('token_client', 'authenticated', {
         httpOnly: false,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        secure: true,
+        sameSite: 'none',
         maxAge: 7 * 24 * 60 * 60 * 1000
       });
 
       // Redirect to frontend
-      res.redirect('http://localhost:3000/');
+      const frontendURL = process.env.FRONTEND_URL || 'http://localhost:3000';
+      res.redirect(frontendURL);
     } catch (error) {
       console.error('Google OAuth callback error:', error);
-      res.redirect('http://localhost:3000/login?error=oauth_failed');
+      const frontendURL = process.env.FRONTEND_URL || 'http://localhost:3000';
+      res.redirect(`${frontendURL}/login?error=oauth_failed`);
     }
   })(req, res, next);
 });
@@ -399,11 +403,13 @@ router.get('/github/callback', (req, res, next) => {
   passport.authenticate('github', { session: false }, (err, user, info) => {
     if (err) {
       console.error('GitHub OAuth error:', err);
-      return res.redirect('http://localhost:3000/login?error=oauth_error');
+      const frontendURL = process.env.FRONTEND_URL || 'http://localhost:3000';
+      return res.redirect(`${frontendURL}/login?error=oauth_error`);
     }
     if (!user) {
       console.error('GitHub OAuth failed - no user:', info);
-      return res.redirect('http://localhost:3000/login?error=oauth_failed');
+      const frontendURL = process.env.FRONTEND_URL || 'http://localhost:3000';
+      return res.redirect(`${frontendURL}/login?error=oauth_failed`);
     }
 
     try {
@@ -413,24 +419,26 @@ router.get('/github/callback', (req, res, next) => {
       // Set HTTP-only cookie
       res.cookie('token', token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        secure: true,
+        sameSite: 'none',
         maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
       });
 
       // Set a client-readable cookie for middleware
       res.cookie('token_client', 'authenticated', {
         httpOnly: false,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        secure: true,
+        sameSite: 'none',
         maxAge: 7 * 24 * 60 * 60 * 1000
       });
 
       // Redirect to frontend
-      res.redirect('http://localhost:3000/');
+      const frontendURL = process.env.FRONTEND_URL || 'http://localhost:3000';
+      res.redirect(frontendURL);
     } catch (error) {
       console.error('GitHub OAuth callback error:', error);
-      res.redirect('http://localhost:3000/login?error=oauth_failed');
+      const frontendURL = process.env.FRONTEND_URL || 'http://localhost:3000';
+      res.redirect(`${frontendURL}/login?error=oauth_failed`);
     }
   })(req, res, next);
 });
