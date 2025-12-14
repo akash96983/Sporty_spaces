@@ -22,7 +22,10 @@ app.use(passport.initialize());
 
 // CORS configuration
 app.use(cors({
-  origin: 'http://localhost:3000', // Your Next.js frontend URL
+  origin: [
+    'http://localhost:3000', // Local development
+    process.env.FRONTEND_URL || 'http://localhost:3000' // Production Vercel URL
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
