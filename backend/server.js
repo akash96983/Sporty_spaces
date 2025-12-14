@@ -22,10 +22,18 @@ app.use(passport.initialize());
 
 // CORS configuration
 app.use(cors({
-  origin: [
-    'http://localhost:3000', // Local development
-    process.env.FRONTEND_URL || 'http://localhost:3000' // Production Vercel URL
-  ],
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      'http://localhost:3000',
+      'https://sporty-spaces-9lgf.vercel.app'
+    ];
+    // Allow all Vercel preview deployments
+    if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
