@@ -109,7 +109,8 @@ export default function TurfDetailPage() {
 
   const fetchSpaceDetails = async (id: string) => {
     try {
-      const response = await fetchWithAuth(`http://localhost:5001/api/spaces/${id}`);
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+      const response = await fetchWithAuth(`${API_URL}/spaces/${id}`);
       if (response.ok) {
         const data = await response.json();
         setSpace(data.space);
@@ -121,7 +122,8 @@ export default function TurfDetailPage() {
 
   const fetchReviews = async (spaceId: string) => {
     try {
-      const response = await fetchWithAuth(`http://localhost:5001/api/reviews/${spaceId}`);
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+      const response = await fetchWithAuth(`${API_URL}/reviews/${spaceId}`);
       if (response.ok) {
         const data = await response.json();
         setReviews(data.reviews);
@@ -134,7 +136,8 @@ export default function TurfDetailPage() {
 
   const fetchBookedSlots = async (spaceId: string, date: string) => {
     try {
-      const response = await fetchWithAuth(`http://localhost:5001/api/bookings/check-availability/${spaceId}?date=${date}`);
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+      const response = await fetchWithAuth(`${API_URL}/bookings/check-availability/${spaceId}?date=${date}`);
       if (response.ok) {
         const data = await response.json();
         const bookedTimeSlots = data.bookedSlots.map((slot: any) => `${slot.startTime} - ${slot.endTime}`);
@@ -158,7 +161,8 @@ export default function TurfDetailPage() {
         return;
       }
 
-      const response = await fetchWithAuth('http://localhost:5001/api/reviews', {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+      const response = await fetchWithAuth(`${API_URL}/reviews`, {
         method: 'POST',
         body: JSON.stringify({
           spaceId: space._id,
@@ -339,7 +343,8 @@ export default function TurfDetailPage() {
       
       const [startTime, endTime] = selectedTimeSlot.split(' - ');
       
-      const response = await fetchWithAuth('http://localhost:5001/api/bookings', {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+      const response = await fetchWithAuth(`${API_URL}/bookings`, {
         method: 'POST',
         body: JSON.stringify({
           spaceId: space?._id,

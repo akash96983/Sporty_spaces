@@ -186,7 +186,8 @@ export default function Page() {
 
   const fetchSpaces = async () => {
     try {
-      const response = await fetchWithAuth('http://localhost:5001/api/spaces');
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+      const response = await fetchWithAuth(`${API_URL}/spaces`);
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -206,7 +207,8 @@ export default function Page() {
       const spacesWithReviews = await Promise.all(
         data.spaces.map(async (space: Space) => {
           try {
-            const reviewResponse = await fetch(`http://localhost:5001/api/reviews/${space._id}`);
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+            const reviewResponse = await fetch(`${API_URL}/reviews/${space._id}`);
             if (reviewResponse.ok) {
               const reviewData = await reviewResponse.json();
               return {

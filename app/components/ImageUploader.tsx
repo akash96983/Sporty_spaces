@@ -52,7 +52,8 @@ export default function ImageUploader({
         files.map(file => convertToBase64(file))
       );
 
-      const response = await fetchWithAuth('http://localhost:5001/api/upload/images', {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+      const response = await fetchWithAuth(`${API_URL}/upload/images`, {
         method: 'POST',
         body: JSON.stringify({ images: base64Images })
       });

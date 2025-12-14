@@ -77,7 +77,8 @@ export default function MySpacesPage() {
 
   const fetchMySpaces = async () => {
     try {
-      const response = await fetchWithAuth('http://localhost:5001/api/spaces/my-spaces');
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+      const response = await fetchWithAuth(`${API_URL}/spaces/my-spaces`);
       const result = await response.json();
       if (result.success) {
         setSpaces(result.spaces);
@@ -123,8 +124,8 @@ export default function MySpacesPage() {
 
     try {
       const url = editingSpaceId 
-        ? `http://localhost:5001/api/spaces/${editingSpaceId}`
-        : 'http://localhost:5001/api/spaces';
+        ? `${API_URL}/spaces/${editingSpaceId}`
+        : `${API_URL}/spaces`;
       
       const method = editingSpaceId ? 'PUT' : 'POST';
       
@@ -204,7 +205,8 @@ export default function MySpacesPage() {
     }
 
     try {
-      const response = await fetchWithAuth(`http://localhost:5001/api/spaces/${spaceId}`, {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+      const response = await fetchWithAuth(`${API_URL}/spaces/${spaceId}`, {
         method: 'DELETE'
       });
 
@@ -227,7 +229,8 @@ export default function MySpacesPage() {
   const toggleAvailability = async (spaceId: string, currentStatus: boolean) => {
     try {
       console.log('Toggle availability for space:', spaceId);
-      const response = await fetchWithAuth(`http://localhost:5001/api/spaces/${spaceId}/toggle-availability`, {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+      const response = await fetchWithAuth(`${API_URL}/spaces/${spaceId}/toggle-availability`, {
         method: 'PATCH',
       });
 

@@ -48,7 +48,8 @@ export default function FavoritesPage() {
 
   const fetchSpaces = async () => {
     try {
-      const response = await fetch('http://localhost:5001/api/spaces');
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+      const response = await fetch(`${API_URL}/spaces`);
       if (response.ok) {
         const data = await response.json();
         setSpaces(data.spaces);

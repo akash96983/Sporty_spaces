@@ -73,7 +73,8 @@ export default function MyBookingsPage() {
 
   const fetchBookings = async () => {
     try {
-      const response = await fetchWithAuth('http://localhost:5001/api/bookings/my-bookings');
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+      const response = await fetchWithAuth(`${API_URL}/bookings/my-bookings`);
 
       if (response.ok) {
         const data = await response.json();
@@ -90,7 +91,8 @@ export default function MyBookingsPage() {
 
   const fetchReceivedBookings = async () => {
     try {
-      const response = await fetchWithAuth('http://localhost:5001/api/bookings/received');
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+      const response = await fetchWithAuth(`${API_URL}/bookings/received`);
 
       if (response.ok) {
         const data = await response.json();
@@ -113,7 +115,8 @@ export default function MyBookingsPage() {
     try {
       setIsCancelling(bookingToCancel);
       setShowCancelModal(false);
-      const response = await fetchWithAuth(`http://localhost:5001/api/bookings/${bookingToCancel}/cancel`, {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+      const response = await fetchWithAuth(`${API_URL}/bookings/${bookingToCancel}/cancel`, {
         method: 'DELETE',
       });
 
