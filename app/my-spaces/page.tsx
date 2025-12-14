@@ -20,6 +20,7 @@ interface Space {
 
 export default function MySpacesPage() {
   const router = useRouter();
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
   const [isLoading, setIsLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -77,7 +78,6 @@ export default function MySpacesPage() {
 
   const fetchMySpaces = async () => {
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
       const response = await fetchWithAuth(`${API_URL}/spaces/my-spaces`);
       const result = await response.json();
       if (result.success) {
@@ -205,7 +205,6 @@ export default function MySpacesPage() {
     }
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
       const response = await fetchWithAuth(`${API_URL}/spaces/${spaceId}`, {
         method: 'DELETE'
       });
@@ -229,7 +228,6 @@ export default function MySpacesPage() {
   const toggleAvailability = async (spaceId: string, currentStatus: boolean) => {
     try {
       console.log('Toggle availability for space:', spaceId);
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
       const response = await fetchWithAuth(`${API_URL}/spaces/${spaceId}/toggle-availability`, {
         method: 'PATCH',
       });
