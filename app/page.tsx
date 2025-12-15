@@ -54,29 +54,12 @@ export default function Page() {
   } = filters;
 
   useEffect(() => {
-    let isActive = true;
-
-    const init = async () => {
-      const authenticated = await authApi.ensureUser();
-      if (!isActive) {
-        return;
-      }
-
-      if (!authenticated) {
-        router.push('/login');
-        return;
-      }
-
-      fetchSpaces();
-      loadFavorites();
-    };
-
-    init();
-
-    return () => {
-      isActive = false;
-    };
-  }, [router]);
+    // Homepage is public - no auth required
+    // Just try to load user silently for personalization
+    authApi.ensureUser().catch(() => {});
+    fetchSpaces();
+    loadFavorites();
+  }, []);
 
   useEffect(() => {
     applyFilters();

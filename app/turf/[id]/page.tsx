@@ -77,13 +77,11 @@ export default function TurfDetailPage() {
     let isActive = true;
 
     const init = async () => {
-      const authenticated = await authApi.ensureUser();
+      // Turf detail page is public - viewing doesn't require auth
+      // Booking requires auth (handled at booking time)
+      await authApi.ensureUser().catch(() => {});
+      
       if (!isActive) {
-        return;
-      }
-
-      if (!authenticated) {
-        router.push('/login');
         return;
       }
 

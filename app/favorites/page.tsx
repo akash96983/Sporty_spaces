@@ -25,19 +25,12 @@ export default function FavoritesPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const init = async () => {
-      const authenticated = await authApi.ensureUser();
-      if (!authenticated) {
-        router.push('/login');
-        return;
-      }
-
-      loadFavorites();
-      fetchSpaces();
-    };
-
-    init();
-  }, [router]);
+    // Favorites page is public (uses localStorage)
+    // Just try to load user silently for navbar
+    authApi.ensureUser().catch(() => {});
+    loadFavorites();
+    fetchSpaces();
+  }, []);
 
   const loadFavorites = () => {
     const saved = localStorage.getItem('favorites');

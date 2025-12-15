@@ -25,29 +25,11 @@ export default function Login() {
   const oauthBaseUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001').replace(/\/api\/?$/, '');
 
   useEffect(() => {
-    let isActive = true;
-
-    const checkSession = async () => {
-      if (authApi.getUser()) {
-        router.push('/');
-        return;
-      }
-
-      const authenticated = await authApi.ensureUser();
-      if (!isActive) {
-        return;
-      }
-
-      if (authenticated) {
-        router.push('/');
-      }
-    };
-
-    checkSession();
-
-    return () => {
-      isActive = false;
-    };
+    // Only redirect if user is already logged in (check localStorage, not API)
+    const user = authApi.getUser();
+    if (user) {
+      router.push('/');
+    }
   }, [router]);
 
   const validateEmail = (value: string) => {
