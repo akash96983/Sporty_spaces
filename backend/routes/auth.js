@@ -167,8 +167,9 @@ router.post('/logout', protect, (req, res) => {
   // Clear the cookie
   res.cookie('token', '', {
     httpOnly: true,
-    expires: new Date(0),
-    sameSite: 'lax'
+    secure: true,
+    sameSite: 'none',
+    expires: new Date(0)
   });
   
   res.status(200).json({
@@ -303,15 +304,15 @@ router.delete('/delete-account', protect, async (req, res) => {
     // Clear auth cookies
     res.cookie('token', '', {
       httpOnly: true,
-      expires: new Date(0),
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
+      secure: true,
+      sameSite: 'none',
+      expires: new Date(0)
     });
     res.cookie('token_client', '', {
       httpOnly: false,
-      expires: new Date(0),
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
+      secure: true,
+      sameSite: 'none',
+      expires: new Date(0)
     });
 
     res.status(200).json({
