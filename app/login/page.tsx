@@ -24,7 +24,31 @@ export default function Login() {
   });
   const oauthBaseUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001').replace(/\/api\/?$/, '');
 
-  // No auth check needed on login page - let middleware handle it
+  useEffect(() => {
+    let isActive = true;
+
+    const checkSession = async () => {
+      if (authApi.getUser()) {
+        router.push('/');
+        return;
+      }
+
+      const authenticated = await authApi.ensureUser();
+      if (!isActive) {
+        return;
+      }
+
+      if (authenticated) {
+        router.push('/');
+      }
+    };
+
+    checkSession();
+
+    return () => {
+      isActive = false;
+    };
+  }, [router]);
 
   const validateEmail = (value: string) => {
     if (!value.trim()) {
