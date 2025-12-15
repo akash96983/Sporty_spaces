@@ -25,20 +25,29 @@ export default function Login() {
   const oauthBaseUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001').replace(/\/api\/?$/, '');
 
   useEffect(() => {
-    // Check if user has valid session by calling API
-    const checkAuth = async () => {
-      try {
-        await authApi.getCurrentUser();
-        // If successful, user is already logged in
+    let isActive = true;
+
+    const checkSession = async () => {
+      if (authApi.getUser()) {
         router.push('/');
-      } catch {
-        // User is not logged in, stay on login page
-        // Clear any stale localStorage data
-        authApi.logout();
+        return;
+      }
+
+      const authenticated = await authApi.ensureUser();
+      if (!isActive) {
+        return;
+      }
+
+      if (authenticated) {
+        router.push('/');
       }
     };
-    
-    checkAuth();
+
+    checkSession();
+
+    return () => {
+      isActive = false;
+    };
   }, [router]);
 
   const validateEmail = (value: string) => {
