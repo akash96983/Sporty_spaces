@@ -86,6 +86,9 @@ const fetchAuthenticatedUser = async (): Promise<ApiResponse> => {
   const result = await response.json();
 
   if (!response.ok) {
+    if (response.status === 401) {
+      TokenManager.clearAll();
+    }
     throw new Error(result.message || 'Failed to get user');
   }
 
@@ -184,10 +187,7 @@ export const authApi = {
   },
 
   async ensureUser(): Promise<boolean> {
-    if (TokenManager.getUser()) {
-      return true;
-    }
-
+    // Always verify with server to ensure token is valid
     try {
       await fetchAuthenticatedUser();
       return true;
