@@ -77,11 +77,13 @@ export default function TurfDetailPage() {
     let isActive = true;
 
     const init = async () => {
-      // Turf detail page is public - viewing doesn't require auth
-      // Booking requires auth (handled at booking time)
-      await authApi.ensureUser().catch(() => {});
-      
+      const authenticated = await authApi.ensureUser();
       if (!isActive) {
+        return;
+      }
+
+      if (!authenticated) {
+        router.push('/login');
         return;
       }
 
@@ -107,7 +109,7 @@ export default function TurfDetailPage() {
 
   const fetchSpaceDetails = async (id: string) => {
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+      const API_URL = '/api';
       const response = await fetchWithAuth(`${API_URL}/spaces/${id}`);
       if (response.ok) {
         const data = await response.json();
@@ -120,7 +122,7 @@ export default function TurfDetailPage() {
 
   const fetchReviews = async (spaceId: string) => {
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+      const API_URL = '/api';
       const response = await fetchWithAuth(`${API_URL}/reviews/${spaceId}`);
       if (response.ok) {
         const data = await response.json();
@@ -134,7 +136,7 @@ export default function TurfDetailPage() {
 
   const fetchBookedSlots = async (spaceId: string, date: string) => {
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+      const API_URL = '/api';
       const response = await fetchWithAuth(`${API_URL}/bookings/check-availability/${spaceId}?date=${date}`);
       if (response.ok) {
         const data = await response.json();
@@ -159,7 +161,7 @@ export default function TurfDetailPage() {
         return;
       }
 
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+      const API_URL = '/api';
       const response = await fetchWithAuth(`${API_URL}/reviews`, {
         method: 'POST',
         body: JSON.stringify({
@@ -198,8 +200,8 @@ export default function TurfDetailPage() {
   }
 
   // Use real images from backend or fallback to placeholder
-  const images = space.images && space.images.length > 0 
-    ? space.images 
+  const images = space.images && space.images.length > 0
+    ? space.images
     : [{ url: '', publicId: '' }];
 
   const amenityIcons: { [key: string]: string } = {
@@ -218,18 +220,18 @@ export default function TurfDetailPage() {
   // Generate time slots based on operating hours
   const generateTimeSlots = (opening: string, closing: string) => {
     const slots: string[] = [];
-    
+
     // Convert time strings to 24-hour format for easier calculation
     const parseTime = (timeStr: string) => {
       const [time, period] = timeStr.split(' ');
       let [hours, minutes] = time.split(':').map(Number);
-      
+
       if (period?.toUpperCase() === 'PM' && hours !== 12) {
         hours += 12;
       } else if (period?.toUpperCase() === 'AM' && hours === 12) {
         hours = 0;
       }
-      
+
       return hours;
     };
 
@@ -242,26 +244,26 @@ export default function TurfDetailPage() {
 
     const startHour = parseTime(opening);
     let endHour = parseTime(closing);
-    
+
     // Handle overnight hours (e.g., 21:00 to 03:00)
     if (endHour <= startHour) {
       endHour += 24; // Add 24 hours to handle next day
     }
-    
+
     // Generate hourly slots
     let currentHour = startHour;
-    
+
     while (currentHour < endHour) {
       const nextHour = currentHour + 1;
       const displayCurrentHour = currentHour >= 24 ? currentHour - 24 : currentHour;
       const displayNextHour = nextHour >= 24 ? nextHour - 24 : nextHour;
-      
+
       const slotStart = formatTime(displayCurrentHour);
       const slotEnd = formatTime(displayNextHour);
       slots.push(`${slotStart} - ${slotEnd}`);
       currentHour++;
     }
-    
+
     return slots;
   };
 
@@ -271,20 +273,20 @@ export default function TurfDetailPage() {
   const now = new Date();
   const today = now.toISOString().split('T')[0]; // YYYY-MM-DD format
   const currentHour = now.getHours();
-  
+
   // Check if a time slot is in the past or already booked
   const isSlotDisabled = (slot: string) => {
     if (!selectedDate) return false;
-    
+
     // Check if slot is already booked
     if (bookedSlots.includes(slot)) return true;
-    
+
     const selectedDateObj = new Date(selectedDate);
     const todayObj = new Date(today);
-    
+
     // If selected date is in the past, disable all slots
     if (selectedDateObj < todayObj) return true;
-    
+
     // If selected date is today, check if slot time has passed
     if (selectedDate === today) {
       const slotStartTime = slot.split(' - ')[0];
@@ -292,7 +294,7 @@ export default function TurfDetailPage() {
       // Only disable if the slot has already passed (not if it's the current hour)
       return slotHour < currentHour;
     }
-    
+
     return false;
   };
 
@@ -300,13 +302,13 @@ export default function TurfDetailPage() {
   const parseTime = (timeStr: string) => {
     const [time, period] = timeStr.split(' ');
     let [hours] = time.split(':').map(Number);
-    
+
     if (period?.toUpperCase() === 'PM' && hours !== 12) {
       hours += 12;
     } else if (period?.toUpperCase() === 'AM' && hours === 12) {
       hours = 0;
     }
-    
+
     return hours;
   };
 
@@ -338,9 +340,9 @@ export default function TurfDetailPage() {
       }
 
       setIsBooking(true);
-      
+
       const [startTime, endTime] = selectedTimeSlot.split(' - ');
-      
+
       const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
       const response = await fetchWithAuth(`${API_URL}/bookings`, {
         method: 'POST',
@@ -409,8 +411,8 @@ export default function TurfDetailPage() {
               {/* Main Image */}
               <div className="relative h-96 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl overflow-hidden mb-4">
                 {images[selectedImage].url ? (
-                  <img 
-                    src={images[selectedImage].url} 
+                  <img
+                    src={images[selectedImage].url}
                     alt={space.name}
                     className="w-full h-full object-cover"
                   />
@@ -430,13 +432,12 @@ export default function TurfDetailPage() {
                     <button
                       key={index}
                       onClick={() => setSelectedImage(index)}
-                      className={`relative h-20 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-lg overflow-hidden transition-all ${
-                        selectedImage === index ? 'ring-2 ring-emerald-500 ring-offset-2' : 'hover:opacity-80'
-                      }`}
+                      className={`relative h-20 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-lg overflow-hidden transition-all ${selectedImage === index ? 'ring-2 ring-emerald-500 ring-offset-2' : 'hover:opacity-80'
+                        }`}
                     >
                       {image.url ? (
-                        <img 
-                          src={image.url} 
+                        <img
+                          src={image.url}
                           alt={`${space.name} ${index + 1}`}
                           className="w-full h-full object-cover"
                         />
@@ -456,7 +457,7 @@ export default function TurfDetailPage() {
             {/* Turf Information */}
             <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
               <h1 className="text-3xl font-bold text-slate-900 mb-2">{space.name}</h1>
-              
+
               {/* Rating */}
               <div className="flex items-center gap-3 mb-4">
                 <div className="flex items-center">
@@ -558,7 +559,7 @@ export default function TurfDetailPage() {
             <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold text-slate-900">Customer Reviews</h2>
-                <button 
+                <button
                   onClick={() => setShowReviewModal(true)}
                   className="text-sm font-medium text-emerald-600 hover:text-emerald-700"
                 >
@@ -673,13 +674,12 @@ export default function TurfDetailPage() {
                             key={slot}
                             disabled={disabled}
                             onClick={() => handleTimeSlotClick(slot)}
-                            className={`px-2 py-1.5 text-xs font-medium border rounded-md transition-all ${
-                              disabled 
+                            className={`px-2 py-1.5 text-xs font-medium border rounded-md transition-all ${disabled
                                 ? bookedSlots.includes(slot)
                                   ? 'text-red-400 border-red-200 bg-red-50 cursor-not-allowed'
                                   : 'text-slate-400 border-slate-200 bg-slate-50 cursor-not-allowed'
                                 : 'text-slate-700 border-slate-300 hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-700'
-                            }`}
+                              }`}
                           >
                             {slot} {bookedSlots.includes(slot) ? '(Booked)' : ''}
                           </button>
@@ -727,9 +727,9 @@ export default function TurfDetailPage() {
                     onClick={() => setNewReview({ ...newReview, rating: star })}
                     className="transition-colors"
                   >
-                    <svg 
-                      className={`w-8 h-8 ${star <= newReview.rating ? 'text-amber-400' : 'text-slate-300'}`} 
-                      fill="currentColor" 
+                    <svg
+                      className={`w-8 h-8 ${star <= newReview.rating ? 'text-amber-400' : 'text-slate-300'}`}
+                      fill="currentColor"
                       viewBox="0 0 20 20"
                     >
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />

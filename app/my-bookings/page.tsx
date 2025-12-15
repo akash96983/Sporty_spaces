@@ -73,7 +73,7 @@ export default function MyBookingsPage() {
 
   const fetchBookings = async () => {
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+      const API_URL = '/api';
       const response = await fetchWithAuth(`${API_URL}/bookings/my-bookings`);
 
       if (response.ok) {
@@ -91,7 +91,7 @@ export default function MyBookingsPage() {
 
   const fetchReceivedBookings = async () => {
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+      const API_URL = '/api';
       const response = await fetchWithAuth(`${API_URL}/bookings/received`);
 
       if (response.ok) {
@@ -115,7 +115,7 @@ export default function MyBookingsPage() {
     try {
       setIsCancelling(bookingToCancel);
       setShowCancelModal(false);
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+      const API_URL = '/api';
       const response = await fetchWithAuth(`${API_URL}/bookings/${bookingToCancel}/cancel`, {
         method: 'DELETE',
       });
@@ -174,7 +174,7 @@ export default function MyBookingsPage() {
   const canCancelBooking = (booking: Booking) => {
     // Only allow cancellation of confirmed bookings
     if (booking.status !== 'confirmed') return false;
-    
+
     // For now, allow cancellation of all confirmed bookings
     // You can add time restrictions later if needed
     return true;
@@ -203,12 +203,12 @@ export default function MyBookingsPage() {
               </svg>
             </div>
           </div>
-          
+
           <h2 className="text-2xl font-semibold text-slate-900 mb-3">No Bookings Yet</h2>
           <p className="text-slate-600 mb-6 leading-relaxed">
             You haven't made any bookings yet. Start exploring turfs and book your first space!
           </p>
-          
+
           <Link href="/" className="inline-block px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-sm font-medium rounded-full shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/40 transition-all">
             Explore Turfs
           </Link>
@@ -230,35 +230,31 @@ export default function MyBookingsPage() {
           <div className="inline-flex items-center bg-white rounded-full p-1 shadow-sm border border-gray-200">
             <button
               onClick={() => setViewMode('my-bookings')}
-              className={`px-3 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all flex items-center gap-2 ${
-                viewMode === 'my-bookings'
-                  ? 'bg-emerald-500 text-white shadow-md'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
+              className={`px-3 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all flex items-center gap-2 ${viewMode === 'my-bookings'
+                ? 'bg-emerald-500 text-white shadow-md'
+                : 'text-gray-600 hover:text-gray-900'
+                }`}
             >
               <span className="hidden sm:inline">My Bookings</span>
               <span className="sm:hidden">Mine</span>
               {bookings.length > 0 && (
-                <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
-                  viewMode === 'my-bookings' ? 'bg-white/20' : 'bg-gray-100'
-                }`}>
+                <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${viewMode === 'my-bookings' ? 'bg-white/20' : 'bg-gray-100'
+                  }`}>
                   {bookings.length}
                 </span>
               )}
             </button>
             <button
               onClick={() => setViewMode('received')}
-              className={`px-3 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all flex items-center gap-2 ${
-                viewMode === 'received'
-                  ? 'bg-emerald-500 text-white shadow-md'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
+              className={`px-3 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all flex items-center gap-2 ${viewMode === 'received'
+                ? 'bg-emerald-500 text-white shadow-md'
+                : 'text-gray-600 hover:text-gray-900'
+                }`}
             >
               Received
               {receivedBookings.length > 0 && (
-                <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
-                  viewMode === 'received' ? 'bg-white/20' : 'bg-gray-100'
-                }`}>
+                <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${viewMode === 'received' ? 'bg-white/20' : 'bg-gray-100'
+                  }`}>
                   {receivedBookings.length}
                 </span>
               )}
@@ -281,7 +277,7 @@ export default function MyBookingsPage() {
               {isMyBookingsView ? 'No Bookings Yet' : 'No Received Bookings'}
             </h2>
             <p className="text-slate-600 mb-6 leading-relaxed">
-              {isMyBookingsView 
+              {isMyBookingsView
                 ? "You haven't made any bookings yet. Start exploring turfs and book your first space!"
                 : "You haven't received any bookings for your spaces yet."}
             </p>
@@ -301,8 +297,8 @@ export default function MyBookingsPage() {
                 <div className="flex items-center gap-5">
                   {booking.space?.images?.[0]?.url ? (
                     <div className="w-16 h-16 rounded-xl overflow-hidden bg-gray-100">
-                      <img 
-                        src={booking.space.images[0].url} 
+                      <img
+                        src={booking.space.images[0].url}
                         alt={booking.space.name}
                         className="w-full h-full object-cover"
                       />
@@ -314,16 +310,16 @@ export default function MyBookingsPage() {
                       </svg>
                     </div>
                   )}
-                    <div>
-                      <h3 className="text-xl font-medium text-gray-900 mb-1">{booking.space?.name || 'Unknown Space'}</h3>
-                      <p className="text-gray-500 flex items-center gap-1 text-sm">
+                  <div>
+                    <h3 className="text-xl font-medium text-gray-900 mb-1">{booking.space?.name || 'Unknown Space'}</h3>
+                    <p className="text-gray-500 flex items-center gap-1 text-sm">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       </svg>
-                        {booking.space?.city || 'Unknown City'}, {booking.space?.state || 'Unknown State'}
+                      {booking.space?.city || 'Unknown City'}, {booking.space?.state || 'Unknown State'}
                     </p>
                     {/* Show booked by in header for received bookings */}
-                      {!isMyBookingsView && booking.user && (
+                    {!isMyBookingsView && booking.user && (
                       <p className="text-emerald-600 flex items-center gap-1 text-sm font-medium mt-1">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -333,19 +329,17 @@ export default function MyBookingsPage() {
                     )}
                   </div>
                 </div>
-                
+
                 <div className="text-right">
-                  <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium mb-2 ${
-                    booking.status === 'confirmed' 
-                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
-                      : booking.status === 'cancelled'
+                  <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium mb-2 ${booking.status === 'confirmed'
+                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                    : booking.status === 'cancelled'
                       ? 'bg-red-50 text-red-700 border border-red-200'
                       : 'bg-blue-50 text-blue-700 border border-blue-200'
-                  }`}>
-                    <div className={`w-1.5 h-1.5 rounded-full mr-2 ${
-                      booking.status === 'confirmed' ? 'bg-emerald-400' : 
+                    }`}>
+                    <div className={`w-1.5 h-1.5 rounded-full mr-2 ${booking.status === 'confirmed' ? 'bg-emerald-400' :
                       booking.status === 'cancelled' ? 'bg-red-400' : 'bg-blue-400'
-                    }`}></div>
+                      }`}></div>
                     {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
                   </div>
                   <p className="text-2xl font-light text-gray-900">₹{booking.totalAmount}</p>
@@ -361,14 +355,14 @@ export default function MyBookingsPage() {
                     </svg>
                     <span className="font-medium">{formatDate(booking.date)}</span>
                   </div>
-                  
+
                   <div className="flex items-center gap-2 text-gray-600">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <span className="font-medium">{booking.startTime} - {booking.endTime}</span>
                   </div>
-                  
+
                   <div className="flex items-center gap-2 text-gray-600">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -410,7 +404,7 @@ export default function MyBookingsPage() {
                 <p className="text-xs text-gray-500">
                   Booked on {formatTime(booking.createdAt)}
                 </p>
-                
+
                 <div className="flex items-center gap-4">
                   {booking.space?._id && (
                     <Link
@@ -420,7 +414,7 @@ export default function MyBookingsPage() {
                       View Details
                     </Link>
                   )}
-                  
+
                   {isMyBookingsView && canCancelBooking(booking) && (
                     <button
                       onClick={() => openCancelModal(booking._id)}

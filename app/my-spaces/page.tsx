@@ -20,7 +20,7 @@ interface Space {
 
 export default function MySpacesPage() {
   const router = useRouter();
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+  const API_URL = '/api';
   const [isLoading, setIsLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -112,7 +112,7 @@ export default function MySpacesPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (formData.images.length === 0) {
       setError('Please upload at least one image');
       setTimeout(() => setError(''), 3000);
@@ -123,12 +123,12 @@ export default function MySpacesPage() {
     setError('');
 
     try {
-      const url = editingSpaceId 
+      const url = editingSpaceId
         ? `${API_URL}/spaces/${editingSpaceId}`
         : `${API_URL}/spaces`;
-      
+
       const method = editingSpaceId ? 'PUT' : 'POST';
-      
+
       const response = await fetchWithAuth(url, {
         method,
         body: JSON.stringify({
@@ -329,8 +329,8 @@ export default function MySpacesPage() {
                 <div className="absolute top-3 left-3">
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/95 backdrop-blur-sm text-emerald-700 text-xs font-semibold rounded-full shadow-lg">
                     <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
-                      <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd"/>
+                      <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                      <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
                     </svg>
                     {space.sportType}
                   </span>
@@ -341,7 +341,7 @@ export default function MySpacesPage() {
                   <h3 className="text-xl font-bold text-slate-900 line-clamp-1 flex-1">{space.name}</h3>
                 </div>
                 <p className="text-sm text-slate-600 mb-4 line-clamp-2 min-h-[40px]">{space.description}</p>
-                
+
                 <div className="flex items-center gap-2 mb-4 text-sm text-slate-600">
                   <svg className="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -355,18 +355,17 @@ export default function MySpacesPage() {
                     <span className="text-2xl font-bold text-emerald-600">₹{space.pricePerHour}</span>
                     <span className="text-sm text-slate-500">/hour</span>
                   </div>
-                  
+
                   {/* Availability Toggle */}
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       toggleAvailability(space._id, space.isActive);
                     }}
-                    className={`w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                      space.isActive 
-                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100' 
+                    className={`w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${space.isActive
+                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
                         : 'bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100'
-                    }`}
+                      }`}
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={space.isActive ? "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" : "M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"} />
@@ -546,8 +545,8 @@ export default function MySpacesPage() {
                     type="time"
                     required
                     value={formData.operatingHours.opening}
-                    onChange={(e) => setFormData({ 
-                      ...formData, 
+                    onChange={(e) => setFormData({
+                      ...formData,
                       operatingHours: { ...formData.operatingHours, opening: e.target.value }
                     })}
                     className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
@@ -559,8 +558,8 @@ export default function MySpacesPage() {
                     type="time"
                     required
                     value={formData.operatingHours.closing}
-                    onChange={(e) => setFormData({ 
-                      ...formData, 
+                    onChange={(e) => setFormData({
+                      ...formData,
                       operatingHours: { ...formData.operatingHours, closing: e.target.value }
                     })}
                     className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
@@ -667,252 +666,252 @@ export default function MySpacesPage() {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
             <div className="flex-1 overflow-y-auto">
-            <div className="sticky top-0 bg-white border-b border-slate-200 p-6 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-slate-900">Add New Space</h2>
-              <button
-                onClick={() => setShowAddModal(false)}
-                className="text-slate-400 hover:text-slate-600 transition-colors"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-
-            <form onSubmit={handleSubmit} className="p-6 space-y-6">
-              {/* Basic Information */}
-              <div>
-                <h3 className="text-lg font-semibold text-slate-900 mb-4">Basic Information</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Space Name *</label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                      placeholder="e.g., Green Valley Sports Arena"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Sport Type *</label>
-                    <select
-                      name="sportType"
-                      value={formData.sportType}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    >
-                      <option value="Football">Football</option>
-                      <option value="Cricket">Cricket</option>
-                      <option value="Basketball">Basketball</option>
-                      <option value="Tennis">Tennis</option>
-                      <option value="Badminton">Badminton</option>
-                      <option value="Volleyball">Volleyball</option>
-                      <option value="Hockey">Hockey</option>
-                      <option value="Other">Other</option>
-                    </select>
-                  </div>
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Description *</label>
-                    <textarea
-                      name="description"
-                      value={formData.description}
-                      onChange={handleChange}
-                      required
-                      rows={3}
-                      className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                      placeholder="Describe your space..."
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Location */}
-              <div>
-                <h3 className="text-lg font-semibold text-slate-900 mb-4">Location</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Address *</label>
-                    <input
-                      type="text"
-                      name="address"
-                      value={formData.address}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">City *</label>
-                    <input
-                      type="text"
-                      name="city"
-                      value={formData.city}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">State *</label>
-                    <input
-                      type="text"
-                      name="state"
-                      value={formData.state}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Pincode *</label>
-                    <input
-                      type="text"
-                      name="pincode"
-                      value={formData.pincode}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Contact Number *</label>
-                    <input
-                      type="tel"
-                      name="contactNumber"
-                      value={formData.contactNumber}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Pricing & Details */}
-              <div>
-                <h3 className="text-lg font-semibold text-slate-900 mb-4">Pricing & Details</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Price per Hour (₹) *</label>
-                    <input
-                      type="number"
-                      name="pricePerHour"
-                      value={formData.pricePerHour}
-                      onChange={handleChange}
-                      required
-                      min="0"
-                      className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Capacity (Max Players) *</label>
-                    <input
-                      type="number"
-                      name="capacity"
-                      value={formData.capacity}
-                      onChange={handleChange}
-                      required
-                      min="1"
-                      placeholder="e.g., 22"
-                      className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Opening Time *</label>
-                    <input
-                      type="time"
-                      name="operatingHours.opening"
-                      value={formData.operatingHours.opening}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Closing Time *</label>
-                    <input
-                      type="time"
-                      name="operatingHours.closing"
-                      value={formData.operatingHours.closing}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Size (e.g., 100x60 ft)</label>
-                    <input
-                      type="text"
-                      name="size"
-                      value={formData.size}
-                      onChange={handleChange}
-                      className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Surface Type</label>
-                    <input
-                      type="text"
-                      name="surfaceType"
-                      value={formData.surfaceType}
-                      onChange={handleChange}
-                      placeholder="e.g., Artificial Turf, Grass"
-                      className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Amenities */}
-              <div>
-                <h3 className="text-lg font-semibold text-slate-900 mb-4">Amenities</h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {['Parking', 'Changing Rooms', 'Washrooms', 'Drinking Water', 'Lighting', 'Seating Area'].map(amenity => (
-                    <label key={amenity} className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={formData.amenities.includes(amenity)}
-                        onChange={() => handleAmenityToggle(amenity)}
-                        className="w-4 h-4 text-emerald-600 border-slate-300 rounded focus:ring-2 focus:ring-emerald-500"
-                      />
-                      <span className="text-sm text-slate-700">{amenity}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Images */}
-              <div>
-                <h3 className="text-lg font-semibold text-slate-900 mb-4">Images * (Max 4)</h3>
-                <ImageUploader
-                  onImagesUploaded={(images) => setFormData(prev => ({ ...prev, images }))}
-                  maxImages={4}
-                  existingImages={formData.images}
-                />
-              </div>
-
-              {/* Submit Buttons */}
-              <div className="flex gap-3 pt-4 border-t border-slate-200">
+              <div className="sticky top-0 bg-white border-b border-slate-200 p-6 flex items-center justify-between">
+                <h2 className="text-2xl font-bold text-slate-900">Add New Space</h2>
                 <button
-                  type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="flex-1 px-6 py-3 border border-slate-300 text-slate-700 text-sm font-medium rounded-lg hover:bg-slate-50 transition-colors"
+                  className="text-slate-400 hover:text-slate-600 transition-colors"
                 >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="flex-1 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {submitting ? 'Adding Space...' : 'Add Space'}
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
                 </button>
               </div>
-            </form>
+
+              <form onSubmit={handleSubmit} className="p-6 space-y-6">
+                {/* Basic Information */}
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-900 mb-4">Basic Information</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">Space Name *</label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="e.g., Green Valley Sports Arena"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">Sport Type *</label>
+                      <select
+                        name="sportType"
+                        value={formData.sportType}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      >
+                        <option value="Football">Football</option>
+                        <option value="Cricket">Cricket</option>
+                        <option value="Basketball">Basketball</option>
+                        <option value="Tennis">Tennis</option>
+                        <option value="Badminton">Badminton</option>
+                        <option value="Volleyball">Volleyball</option>
+                        <option value="Hockey">Hockey</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-slate-700 mb-2">Description *</label>
+                      <textarea
+                        name="description"
+                        value={formData.description}
+                        onChange={handleChange}
+                        required
+                        rows={3}
+                        className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="Describe your space..."
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Location */}
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-900 mb-4">Location</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-slate-700 mb-2">Address *</label>
+                      <input
+                        type="text"
+                        name="address"
+                        value={formData.address}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">City *</label>
+                      <input
+                        type="text"
+                        name="city"
+                        value={formData.city}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">State *</label>
+                      <input
+                        type="text"
+                        name="state"
+                        value={formData.state}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">Pincode *</label>
+                      <input
+                        type="text"
+                        name="pincode"
+                        value={formData.pincode}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">Contact Number *</label>
+                      <input
+                        type="tel"
+                        name="contactNumber"
+                        value={formData.contactNumber}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Pricing & Details */}
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-900 mb-4">Pricing & Details</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">Price per Hour (₹) *</label>
+                      <input
+                        type="number"
+                        name="pricePerHour"
+                        value={formData.pricePerHour}
+                        onChange={handleChange}
+                        required
+                        min="0"
+                        className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">Capacity (Max Players) *</label>
+                      <input
+                        type="number"
+                        name="capacity"
+                        value={formData.capacity}
+                        onChange={handleChange}
+                        required
+                        min="1"
+                        placeholder="e.g., 22"
+                        className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">Opening Time *</label>
+                      <input
+                        type="time"
+                        name="operatingHours.opening"
+                        value={formData.operatingHours.opening}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">Closing Time *</label>
+                      <input
+                        type="time"
+                        name="operatingHours.closing"
+                        value={formData.operatingHours.closing}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">Size (e.g., 100x60 ft)</label>
+                      <input
+                        type="text"
+                        name="size"
+                        value={formData.size}
+                        onChange={handleChange}
+                        className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">Surface Type</label>
+                      <input
+                        type="text"
+                        name="surfaceType"
+                        value={formData.surfaceType}
+                        onChange={handleChange}
+                        placeholder="e.g., Artificial Turf, Grass"
+                        className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Amenities */}
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-900 mb-4">Amenities</h3>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    {['Parking', 'Changing Rooms', 'Washrooms', 'Drinking Water', 'Lighting', 'Seating Area'].map(amenity => (
+                      <label key={amenity} className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.amenities.includes(amenity)}
+                          onChange={() => handleAmenityToggle(amenity)}
+                          className="w-4 h-4 text-emerald-600 border-slate-300 rounded focus:ring-2 focus:ring-emerald-500"
+                        />
+                        <span className="text-sm text-slate-700">{amenity}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Images */}
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-900 mb-4">Images * (Max 4)</h3>
+                  <ImageUploader
+                    onImagesUploaded={(images) => setFormData(prev => ({ ...prev, images }))}
+                    maxImages={4}
+                    existingImages={formData.images}
+                  />
+                </div>
+
+                {/* Submit Buttons */}
+                <div className="flex gap-3 pt-4 border-t border-slate-200">
+                  <button
+                    type="button"
+                    onClick={() => setShowAddModal(false)}
+                    className="flex-1 px-6 py-3 border border-slate-300 text-slate-700 text-sm font-medium rounded-lg hover:bg-slate-50 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="flex-1 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {submitting ? 'Adding Space...' : 'Add Space'}
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

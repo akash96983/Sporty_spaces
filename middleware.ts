@@ -20,10 +20,11 @@ export function middleware(request: NextRequest) {
   const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
   
   // If logged in and trying to access login/signup, redirect to home
-  if (isAuthRoute && token) {
+  // Commented out to prevent redirect loop if client-side auth check fails
+  /* if (isAuthRoute && token) {
     const homeUrl = new URL('/', request.url);
     return NextResponse.redirect(homeUrl);
-  }
+  } */
   
   // If trying to access protected route without token, redirect to login
   if (isProtectedRoute && !token) {

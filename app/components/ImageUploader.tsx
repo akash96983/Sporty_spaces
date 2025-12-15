@@ -9,8 +9,8 @@ interface ImageUploaderProps {
   existingImages?: { url: string; publicId: string }[];
 }
 
-export default function ImageUploader({ 
-  onImagesUploaded, 
+export default function ImageUploader({
+  onImagesUploaded,
   maxImages = 4,
   existingImages = []
 }: ImageUploaderProps) {
@@ -29,7 +29,7 @@ export default function ImageUploader({
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    
+
     if (files.length + images.length > maxImages) {
       setError(`You can only upload up to ${maxImages} images`);
       setTimeout(() => setError(''), 3000);
@@ -46,13 +46,13 @@ export default function ImageUploader({
 
     setUploading(true);
     setError('');
-    
+
     try {
       const base64Images = await Promise.all(
         files.map(file => convertToBase64(file))
       );
 
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+      const API_URL = '/api';
       const response = await fetchWithAuth(`${API_URL}/upload/images`, {
         method: 'POST',
         body: JSON.stringify({ images: base64Images })
@@ -124,11 +124,10 @@ export default function ImageUploader({
             disabled={uploading}
             className="hidden"
           />
-          <div className={`border-2 border-dashed rounded-lg p-8 text-center transition-all ${
-            uploading 
-              ? 'border-slate-300 bg-slate-50' 
+          <div className={`border-2 border-dashed rounded-lg p-8 text-center transition-all ${uploading
+              ? 'border-slate-300 bg-slate-50'
               : 'border-slate-300 hover:border-emerald-500 hover:bg-emerald-50/50'
-          }`}>
+            }`}>
             {uploading ? (
               <div className="flex flex-col items-center gap-2">
                 <div className="animate-spin rounded-full h-8 w-8 border-4 border-emerald-500 border-t-transparent"></div>

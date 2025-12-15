@@ -25,12 +25,19 @@ export default function FavoritesPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Favorites page is public (uses localStorage)
-    // Just try to load user silently for navbar
-    authApi.ensureUser().catch(() => {});
-    loadFavorites();
-    fetchSpaces();
-  }, []);
+    const init = async () => {
+      const authenticated = await authApi.ensureUser();
+      if (!authenticated) {
+        router.push('/login');
+        return;
+      }
+
+      loadFavorites();
+      fetchSpaces();
+    };
+
+    init();
+  }, [router]);
 
   const loadFavorites = () => {
     const saved = localStorage.getItem('favorites');
@@ -41,7 +48,7 @@ export default function FavoritesPage() {
 
   const fetchSpaces = async () => {
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+      const API_URL = '/api';
       const response = await fetch(`${API_URL}/spaces`);
       if (response.ok) {
         const data = await response.json();
@@ -61,7 +68,7 @@ export default function FavoritesPage() {
       : [...favorites, spaceId];
     setFavorites(newFavorites);
     localStorage.setItem('favorites', JSON.stringify(newFavorites));
-    
+
     if (isRemoving) {
       toast('Removed from favorites', {
         icon: '🗑️',
