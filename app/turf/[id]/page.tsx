@@ -343,7 +343,7 @@ export default function TurfDetailPage() {
 
       const [startTime, endTime] = selectedTimeSlot.split(' - ');
 
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+      const API_URL = '/api';
       const response = await fetchWithAuth(`${API_URL}/bookings`, {
         method: 'POST',
         body: JSON.stringify({
@@ -675,10 +675,10 @@ export default function TurfDetailPage() {
                             disabled={disabled}
                             onClick={() => handleTimeSlotClick(slot)}
                             className={`px-2 py-1.5 text-xs font-medium border rounded-md transition-all ${disabled
-                                ? bookedSlots.includes(slot)
-                                  ? 'text-red-400 border-red-200 bg-red-50 cursor-not-allowed'
-                                  : 'text-slate-400 border-slate-200 bg-slate-50 cursor-not-allowed'
-                                : 'text-slate-700 border-slate-300 hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-700'
+                              ? bookedSlots.includes(slot)
+                                ? 'text-red-400 border-red-200 bg-red-50 cursor-not-allowed'
+                                : 'text-slate-400 border-slate-200 bg-slate-50 cursor-not-allowed'
+                              : 'text-slate-700 border-slate-300 hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-700'
                               }`}
                           >
                             {slot} {bookedSlots.includes(slot) ? '(Booked)' : ''}
