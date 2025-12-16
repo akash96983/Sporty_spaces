@@ -57,15 +57,8 @@ export default function Page() {
     let isActive = true;
 
     const init = async () => {
-      const authenticated = await authApi.ensureUser();
-      if (!isActive) {
-        return;
-      }
-
-      if (!authenticated) {
-        router.push('/login');
-        return;
-      }
+      // Home page is public now. We don't force redirect.
+      // Auth state is handled by Navbar.
 
       fetchSpaces();
       loadFavorites();
