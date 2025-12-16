@@ -169,19 +169,17 @@ export default function Page() {
   };
 
   const getUniqueCities = () => {
-    return ['All', ...Array.from(new Set(spaces.map(space => space.city)))];
+    return ['All', ...Array.from(new Set(spaces.map(s => s.city)))];
   };
 
   const getSportTypes = () => {
-    return ['All', ...Array.from(new Set(spaces.map(space => space.sportType)))];
+    return ['All', ...Array.from(new Set(spaces.map(s => s.sportType)))];
   };
 
   const getAllAmenities = () => {
-    const amenitiesSet = new Set<string>();
-    spaces.forEach(space => {
-      space.amenities.forEach(amenity => amenitiesSet.add(amenity));
-    });
-    return Array.from(amenitiesSet);
+    const amenities = new Set<string>();
+    spaces.forEach(s => s.amenities.forEach(a => amenities.add(a)));
+    return Array.from(amenities);
   };
 
   const fetchSpaces = async () => {
