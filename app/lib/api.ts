@@ -165,6 +165,9 @@ export const authApi = {
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('justLoggedOut', 'true');
+      }
       TokenManager.clearAll();
       window.dispatchEvent(new Event('userUpdated'));
     }

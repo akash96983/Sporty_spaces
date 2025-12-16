@@ -20,18 +20,18 @@ router.post('/signup', async (req, res) => {
 
     // Validate input
     if (!username || !email || !password) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Please provide all required fields' 
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide all required fields'
       });
     }
 
     // Check if user already exists
     const userExists = await User.findOne({ $or: [{ email }, { username }] });
     if (userExists) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'User with this email or username already exists' 
+      return res.status(400).json({
+        success: false,
+        message: 'User with this email or username already exists'
       });
     }
 
@@ -65,9 +65,9 @@ router.post('/signup', async (req, res) => {
     });
   } catch (error) {
     console.error('Signup error:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: error.message || 'Server error during signup' 
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Server error during signup'
     });
   }
 });
@@ -81,29 +81,29 @@ router.post('/login', async (req, res) => {
 
     // Validate input
     if (!email || !password) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Please provide email and password' 
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide email and password'
       });
     }
 
     // Check for user (include password field using select)
     const user = await User.findOne({ email }).select('+password');
-    
+
     if (!user) {
-      return res.status(401).json({ 
-        success: false, 
-        message: 'Invalid email or password' 
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid email or password'
       });
     }
 
     // Check if password matches
     const isPasswordCorrect = await user.comparePassword(password);
-    
+
     if (!isPasswordCorrect) {
-      return res.status(401).json({ 
-        success: false, 
-        message: 'Invalid email or password' 
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid email or password'
       });
     }
 
@@ -130,9 +130,9 @@ router.post('/login', async (req, res) => {
     });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Server error during login' 
+    res.status(500).json({
+      success: false,
+      message: 'Server error during login'
     });
   }
 });
@@ -143,7 +143,7 @@ router.post('/login', async (req, res) => {
 router.get('/me', protect, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
-    
+
     res.status(200).json({
       success: true,
       user: {
@@ -153,24 +153,24 @@ router.get('/me', protect, async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ 
-      success: false, 
-      message: 'Server error' 
+    res.status(500).json({
+      success: false,
+      message: 'Server error'
     });
   }
 });
 
 // @route   POST /api/auth/logout
 // @desc    Logout user / clear token
-// @access  Private
-router.post('/logout', protect, (req, res) => {
+// @access  Public
+router.post('/logout', (req, res) => {
   // Clear the cookie
   res.cookie('token', '', {
     httpOnly: true,
     expires: new Date(0),
     sameSite: 'lax'
   });
-  
+
   res.status(200).json({
     success: true,
     message: 'Logged out successfully'
@@ -186,9 +186,9 @@ router.put('/update-profile', protect, async (req, res) => {
 
     // Validate input
     if (!username && !email) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Please provide at least one field to update' 
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide at least one field to update'
       });
     }
 
@@ -206,15 +206,15 @@ router.put('/update-profile', protect, async (req, res) => {
       const existingUser = await User.findOne(query);
       if (existingUser) {
         if (existingUser.username === username) {
-          return res.status(400).json({ 
-            success: false, 
-            message: 'Username already exists' 
+          return res.status(400).json({
+            success: false,
+            message: 'Username already exists'
           });
         }
         if (existingUser.email === email) {
-          return res.status(400).json({ 
-            success: false, 
-            message: 'Email already exists' 
+          return res.status(400).json({
+            success: false,
+            message: 'Email already exists'
           });
         }
       }
@@ -242,9 +242,9 @@ router.put('/update-profile', protect, async (req, res) => {
     });
   } catch (error) {
     console.error('Update profile error:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Server error during profile update' 
+    res.status(500).json({
+      success: false,
+      message: 'Server error during profile update'
     });
   }
 });
@@ -258,9 +258,9 @@ router.put('/change-password', protect, async (req, res) => {
 
     // Validate input
     if (!currentPassword || !newPassword) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Please provide current and new password' 
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide current and new password'
       });
     }
 
@@ -270,9 +270,9 @@ router.put('/change-password', protect, async (req, res) => {
     // Verify current password
     const isPasswordCorrect = await user.comparePassword(currentPassword);
     if (!isPasswordCorrect) {
-      return res.status(401).json({ 
-        success: false, 
-        message: 'Current password is incorrect' 
+      return res.status(401).json({
+        success: false,
+        message: 'Current password is incorrect'
       });
     }
 
@@ -286,9 +286,9 @@ router.put('/change-password', protect, async (req, res) => {
     });
   } catch (error) {
     console.error('Change password error:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Server error during password change' 
+    res.status(500).json({
+      success: false,
+      message: 'Server error during password change'
     });
   }
 });
@@ -320,9 +320,9 @@ router.delete('/delete-account', protect, async (req, res) => {
     });
   } catch (error) {
     console.error('Delete account error:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Server error during account deletion' 
+    res.status(500).json({
+      success: false,
+      message: 'Server error during account deletion'
     });
   }
 });

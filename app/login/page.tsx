@@ -31,6 +31,12 @@ export default function Login() {
       // Don't trust local storage blindly. Verify with server first.
       // if (authApi.getUser()) { router.push('/'); return; }
 
+      // Check if we just logged out to avoid 401 console error
+      if (typeof window !== 'undefined' && sessionStorage.getItem('justLoggedOut')) {
+        sessionStorage.removeItem('justLoggedOut');
+        return;
+      }
+
       const authenticated = await authApi.ensureUser();
       if (!isActive) {
         return;
