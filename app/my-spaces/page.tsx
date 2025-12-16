@@ -65,8 +65,8 @@ export default function MySpacesPage() {
         return;
       }
 
+      await fetchMySpaces();
       setIsLoading(false);
-      fetchMySpaces();
     };
 
     init();
@@ -363,8 +363,8 @@ export default function MySpacesPage() {
                       toggleAvailability(space._id, space.isActive);
                     }}
                     className={`w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${space.isActive
-                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
-                        : 'bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100'
+                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
+                      : 'bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100'
                       }`}
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

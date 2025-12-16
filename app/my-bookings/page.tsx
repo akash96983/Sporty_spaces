@@ -59,9 +59,8 @@ export default function MyBookingsPage() {
         return;
       }
 
+      await Promise.all([fetchBookings(), fetchReceivedBookings()]);
       setIsLoading(false);
-      fetchBookings();
-      fetchReceivedBookings();
     };
 
     init();
