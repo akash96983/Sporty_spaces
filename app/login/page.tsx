@@ -28,10 +28,8 @@ export default function Login() {
     let isActive = true;
 
     const checkSession = async () => {
-      if (authApi.getUser()) {
-        router.push('/');
-        return;
-      }
+      // Don't trust local storage blindly. Verify with server first.
+      // if (authApi.getUser()) { router.push('/'); return; }
 
       const authenticated = await authApi.ensureUser();
       if (!isActive) {
@@ -185,8 +183,8 @@ export default function Login() {
                 placeholder="Enter your email"
                 disabled={isLoading}
                 className={`w-full bg-white border rounded-lg py-2.5 px-4 text-slate-900 font-light placeholder:text-slate-400 placeholder:font-light focus:outline-none focus:ring-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed ${errors.email && touched.email
-                    ? 'border-red-500 focus:ring-red-500'
-                    : 'border-slate-200 focus:ring-emerald-500 focus:border-transparent'
+                  ? 'border-red-500 focus:ring-red-500'
+                  : 'border-slate-200 focus:ring-emerald-500 focus:border-transparent'
                   }`}
                 autoComplete="email"
               />
@@ -209,8 +207,8 @@ export default function Login() {
                   placeholder="Enter your password"
                   disabled={isLoading}
                   className={`w-full bg-white border rounded-lg py-2.5 px-4 pr-12 text-slate-900 font-light placeholder:text-slate-400 placeholder:font-light focus:outline-none focus:ring-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed ${errors.password && touched.password
-                      ? 'border-red-500 focus:ring-red-500'
-                      : 'border-slate-200 focus:ring-emerald-500 focus:border-transparent'
+                    ? 'border-red-500 focus:ring-red-500'
+                    : 'border-slate-200 focus:ring-emerald-500 focus:border-transparent'
                     }`}
                   autoComplete="current-password"
                 />

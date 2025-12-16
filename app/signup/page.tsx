@@ -32,11 +32,14 @@ export default function Signup() {
   const oauthBaseUrl = '';
 
   useEffect(() => {
-    // Redirect to home if already logged in
-    const user = authApi.getUser();
-    if (user) {
-      router.push('/');
-    }
+    // Redirect to home if already logged in - verified by server
+    const checkSession = async () => {
+      const authenticated = await authApi.ensureUser();
+      if (authenticated) {
+        router.push('/');
+      }
+    };
+    checkSession();
   }, [router]);
 
   const validateUsername = (value: string) => {
