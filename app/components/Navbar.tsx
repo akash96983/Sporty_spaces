@@ -112,6 +112,11 @@ export default function Navbar() {
 
   const isActive = (path: string) => pathname === path;
 
+  // Strictly hide Navbar for unauthenticated users or during loading
+  if (isLoading || !user) {
+    return null;
+  }
+
   return (
     <nav className="fixed top-0 left-0 right-0 w-full bg-white/70 backdrop-blur-md border-b border-slate-200/50 z-50">
       <div className="w-full px-4 sm:px-6 lg:px-8">
