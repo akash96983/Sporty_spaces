@@ -282,22 +282,7 @@ export default function Navbar() {
                     </div>
                   )}
                 </div>
-              ) : (
-                <>
-                  <Link
-                    href="/login"
-                    className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
-                  >
-                    Log In
-                  </Link>
-                  <Link
-                    href="/signup"
-                    className="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium rounded-full shadow-lg hover:shadow-xl transition-all"
-                  >
-                    Sign Up
-                  </Link>
-                </>
-              )
+              ) : null
             )}
           </div>
         </div>
@@ -577,24 +562,7 @@ export default function Navbar() {
                     Logout
                   </button>
                 </div>
-              ) : (
-                <div className="p-4 border-t border-slate-100 grid grid-cols-2 gap-3">
-                  <Link
-                    href="/login"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex items-center justify-center px-4 py-3 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 border border-slate-200 transition-colors"
-                  >
-                    Log In
-                  </Link>
-                  <Link
-                    href="/signup"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex items-center justify-center px-4 py-3 rounded-xl text-sm font-medium bg-slate-900 text-white hover:bg-slate-800 transition-colors"
-                  >
-                    Sign Up
-                  </Link>
-                </div>
-              )
+              ) : null
             )}
           </div>
         )}
