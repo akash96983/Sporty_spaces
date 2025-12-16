@@ -31,7 +31,7 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         callbackURL: process.env.GOOGLE_CALLBACK_URL ||
-          (process.env.BACKEND_URL ? `${process.env.BACKEND_URL}/api/auth/google/callback` : 'http://localhost:5001/api/auth/google/callback'),
+          (process.env.BACKEND_URL ? `${process.env.BACKEND_URL.replace(/\/$/, '')}/api/auth/google/callback` : 'http://localhost:5001/api/auth/google/callback'),
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
@@ -89,7 +89,7 @@ if (process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET) {
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
         callbackURL: process.env.GITHUB_CALLBACK_URL ||
-          (process.env.BACKEND_URL ? `${process.env.BACKEND_URL}/api/auth/github/callback` : 'http://localhost:5001/api/auth/github/callback'),
+          (process.env.BACKEND_URL ? `${process.env.BACKEND_URL.replace(/\/$/, '')}/api/auth/github/callback` : 'http://localhost:5001/api/auth/github/callback'),
         scope: ['user:email'],
       },
       async (accessToken, refreshToken, profile, done) => {
