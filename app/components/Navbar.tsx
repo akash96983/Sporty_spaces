@@ -130,104 +130,110 @@ export default function Navbar() {
           </Link>
 
           {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors"
-          >
-            <svg className="w-6 h-6 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              {isMobileMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
+          {!isLoading && user && (
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors"
+            >
+              <svg className="w-6 h-6 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {isMobileMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          )}
 
           {/* Search Bar */}
-          <div className="hidden lg:flex flex-1 max-w-xl mx-8">
-            <div className="relative w-full">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-                <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </div>
-              {isHomePage ? (
-                <>
+          {!isLoading && user && (
+            <div className="hidden lg:flex flex-1 max-w-xl mx-8">
+              <div className="relative w-full">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                  <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+                {isHomePage ? (
+                  <>
+                    <input
+                      type="text"
+                      value={filters.searchQuery || ''}
+                      onChange={(e) => filters.setSearchQuery(e.target.value)}
+                      placeholder="Search for turfs, locations..."
+                      className="w-full pl-11 pr-12 py-2.5 bg-slate-50/80 border border-slate-200/50 rounded-full text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all"
+                    />
+                    <button
+                      onClick={() => setIsFilterOpen(!isFilterOpen)}
+                      className="absolute inset-y-0 right-0 flex items-center pr-3 hover:opacity-70 transition-opacity"
+                    >
+                      <svg className="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                      </svg>
+                    </button>
+                  </>
+                ) : (
                   <input
                     type="text"
-                    value={filters.searchQuery || ''}
-                    onChange={(e) => filters.setSearchQuery(e.target.value)}
                     placeholder="Search for turfs, locations..."
-                    className="w-full pl-11 pr-12 py-2.5 bg-slate-50/80 border border-slate-200/50 rounded-full text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all"
+                    className="w-full pl-11 pr-4 py-2.5 bg-slate-50/80 border border-slate-200/50 rounded-full text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all"
+                    readOnly
                   />
-                  <button
-                    onClick={() => setIsFilterOpen(!isFilterOpen)}
-                    className="absolute inset-y-0 right-0 flex items-center pr-3 hover:opacity-70 transition-opacity"
-                  >
-                    <svg className="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                    </svg>
-                  </button>
-                </>
-              ) : (
-                <input
-                  type="text"
-                  placeholder="Search for turfs, locations..."
-                  className="w-full pl-11 pr-4 py-2.5 bg-slate-50/80 border border-slate-200/50 rounded-full text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all"
-                  readOnly
-                />
-              )}
+                )}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Navigation Links */}
-          <div
-            ref={navContainerRef}
-            className="hidden md:flex items-center relative bg-slate-100/60 rounded-full px-2 py-1"
-          >
-            {/* Sliding Background */}
+          {!isLoading && user && (
             <div
-              className="absolute top-1 left-0 h-[calc(100%-8px)] bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-full shadow-md shadow-emerald-500/25 transition-all duration-400 ease-out"
-              style={{
-                width: `${indicatorStyle.width}px`,
-                transform: `translateX(${indicatorStyle.left}px)`,
-                opacity: indicatorStyle.opacity,
-              }}
-            />
+              ref={navContainerRef}
+              className="hidden md:flex items-center relative bg-slate-100/60 rounded-full px-2 py-1"
+            >
+              {/* Sliding Background */}
+              <div
+                className="absolute top-1 left-0 h-[calc(100%-8px)] bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-full shadow-md shadow-emerald-500/25 transition-all duration-400 ease-out"
+                style={{
+                  width: `${indicatorStyle.width}px`,
+                  transform: `translateX(${indicatorStyle.left}px)`,
+                  opacity: indicatorStyle.opacity,
+                }}
+              />
 
-            <Link
-              ref={homeRef}
-              href="/"
-              className={`relative z-10 px-6 h-10 flex items-center justify-center text-sm font-medium rounded-full whitespace-nowrap transition-colors duration-300 ${isActive('/') ? 'text-white' : 'text-slate-600 hover:text-slate-900'
-                }`}
-            >
-              Home
-            </Link>
-            <Link
-              ref={bookingsRef}
-              href="/my-bookings"
-              className={`relative z-10 px-6 h-10 flex items-center justify-center text-sm font-medium rounded-full whitespace-nowrap transition-colors duration-300 ${isActive('/my-bookings') ? 'text-white' : 'text-slate-600 hover:text-slate-900'
-                }`}
-            >
-              My Bookings
-            </Link>
-            <Link
-              ref={spacesRef}
-              href="/my-spaces"
-              className={`relative z-10 px-6 h-10 flex items-center justify-center text-sm font-medium rounded-full whitespace-nowrap transition-colors duration-300 ${isActive('/my-spaces') ? 'text-white' : 'text-slate-600 hover:text-slate-900'
-                }`}
-            >
-              My Spaces
-            </Link>
-            <Link
-              ref={favoritesRef}
-              href="/favorites"
-              className={`relative z-10 px-6 h-10 flex items-center justify-center text-sm font-medium rounded-full whitespace-nowrap transition-colors duration-300 ${isActive('/favorites') ? 'text-white' : 'text-slate-600 hover:text-slate-900'
-                }`}
-            >
-              Favorites
-            </Link>
-          </div>
+              <Link
+                ref={homeRef}
+                href="/"
+                className={`relative z-10 px-6 h-10 flex items-center justify-center text-sm font-medium rounded-full whitespace-nowrap transition-colors duration-300 ${isActive('/') ? 'text-white' : 'text-slate-600 hover:text-slate-900'
+                  }`}
+              >
+                Home
+              </Link>
+              <Link
+                ref={bookingsRef}
+                href="/my-bookings"
+                className={`relative z-10 px-6 h-10 flex items-center justify-center text-sm font-medium rounded-full whitespace-nowrap transition-colors duration-300 ${isActive('/my-bookings') ? 'text-white' : 'text-slate-600 hover:text-slate-900'
+                  }`}
+              >
+                My Bookings
+              </Link>
+              <Link
+                ref={spacesRef}
+                href="/my-spaces"
+                className={`relative z-10 px-6 h-10 flex items-center justify-center text-sm font-medium rounded-full whitespace-nowrap transition-colors duration-300 ${isActive('/my-spaces') ? 'text-white' : 'text-slate-600 hover:text-slate-900'
+                  }`}
+              >
+                My Spaces
+              </Link>
+              <Link
+                ref={favoritesRef}
+                href="/favorites"
+                className={`relative z-10 px-6 h-10 flex items-center justify-center text-sm font-medium rounded-full whitespace-nowrap transition-colors duration-300 ${isActive('/favorites') ? 'text-white' : 'text-slate-600 hover:text-slate-900'
+                  }`}
+              >
+                Favorites
+              </Link>
+            </div>
+          )}
 
           {/* User Profile / Auth Buttons - Desktop */}
           <div className="hidden md:flex items-center justify-end gap-4">
