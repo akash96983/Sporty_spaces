@@ -1,4 +1,6 @@
 const User = require('../models/User');
+const Space = require('../models/Space');
+const Booking = require('../models/Booking');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
@@ -131,7 +133,7 @@ exports.login = async (req, res) => {
 exports.getMe = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
-    
+
     res.status(200).json({
       success: true,
       data: user
@@ -149,7 +151,7 @@ exports.getMe = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   try {
     const { name, phone } = req.body;
-    
+
     const user = await User.findByIdAndUpdate(
       req.user._id,
       { name, phone },
@@ -189,7 +191,7 @@ exports.changePassword = async (req, res) => {
     }
 
     const user = await User.findById(req.user._id).select('+password');
-    
+
     const isMatch = await user.comparePassword(currentPassword);
     if (!isMatch) {
       return res.status(400).json({
@@ -210,6 +212,40 @@ exports.changePassword = async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Server error'
+    });
+  }
+};
+
+// Delete user account
+exports.deleteAccount = async (req, res) => {
+  try {
+    // Find all spaces owned by the user
+    const userSpaces = await Space.find({ owner: req.user._id });
+    const userSpaceIds = userSpaces.map(space => space._id);
+
+    // Delete all bookings for the user's spaces
+    if (userSpaceIds.length > 0) {
+      await Booking.deleteMany({ space: { $in: userSpaceIds } });
+    }
+
+    // Delete all spaces owned by the user
+    await Space.deleteMany({ owner: req.user._id });
+
+    // Delete all bookings made by the user
+    await Booking.deleteMany({ user: req.user._id });
+
+    // Finally delete the user
+    await User.findByIdAndDelete(req.user._id);
+
+    res.status(200).json({
+      success: true,
+      message: 'Account deleted successfully'
+    });
+  } catch (error) {
+    console.error('Delete account error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Server error during account deletion'
     });
   }
 };

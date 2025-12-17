@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
+const Space = require('../models/Space');
+const Booking = require('../models/Booking');
 const jwt = require('jsonwebtoken');
 const { protect } = require('../middleware/auth');
 
@@ -298,6 +300,22 @@ router.put('/change-password', protect, async (req, res) => {
 // @access  Private
 router.delete('/delete-account', protect, async (req, res) => {
   try {
+    // Find all spaces owned by the user
+    const userSpaces = await Space.find({ owner: req.user.id });
+    const userSpaceIds = userSpaces.map(space => space._id);
+
+    // Delete all bookings for the user's spaces
+    if (userSpaceIds.length > 0) {
+      await Booking.deleteMany({ space: { $in: userSpaceIds } });
+    }
+
+    // Delete all spaces owned by the user
+    await Space.deleteMany({ owner: req.user.id });
+
+    // Delete all bookings made by the user
+    await Booking.deleteMany({ user: req.user.id });
+
+    // Finally delete the user
     await User.findByIdAndDelete(req.user.id);
 
     // Clear auth cookies
