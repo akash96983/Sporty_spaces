@@ -1,13 +1,8 @@
 # OAuth Setup Guide
 
-## Required Packages
+This project handles OAuth via Next.js Route Handlers under `src/app/api/auth/*`.
 
-Install these packages in the backend directory:
-
-```bash
-cd backend
-npm install passport passport-google-oauth20 passport-github2
-```
+You do not need a separate Express backend.
 
 ## Google OAuth Setup
 
@@ -18,10 +13,10 @@ npm install passport passport-google-oauth20 passport-github2
 5. Configure consent screen if prompted
 6. Set Application type: **Web application**
 7. Add Authorized redirect URIs:
-   - `http://localhost:5000/api/auth/google/callback`
+   - `http://localhost:3000/api/auth/google/callback`
    - For production: `https://yourdomain.com/api/auth/google/callback`
 8. Copy **Client ID** and **Client Secret**
-9. Update `.env`:
+9. Update `.env.local` (project root):
    ```env
    GOOGLE_CLIENT_ID=your_actual_client_id_here
    GOOGLE_CLIENT_SECRET=your_actual_client_secret_here
@@ -34,11 +29,11 @@ npm install passport passport-google-oauth20 passport-github2
 3. Fill in:
    - **Application name**: Sporty Spaces
    - **Homepage URL**: `http://localhost:3000`
-   - **Authorization callback URL**: `http://localhost:5000/api/auth/github/callback`
+   - **Authorization callback URL**: `http://localhost:3000/api/auth/github/callback`
 4. Click **Register application**
 5. Copy **Client ID**
 6. Click **Generate a new client secret** and copy it
-7. Update `.env`:
+7. Update `.env.local` (project root):
    ```env
    GITHUB_CLIENT_ID=your_actual_client_id_here
    GITHUB_CLIENT_SECRET=your_actual_client_secret_here
@@ -46,12 +41,9 @@ npm install passport passport-google-oauth20 passport-github2
 
 ## After Setup
 
-1. Restart your backend server:
+1. Restart the Next.js dev server:
    ```bash
-   cd backend
-   npm start
-   # or
-   node server.js
+   npm run dev
    ```
 
 2. The OAuth buttons should now work:
@@ -67,7 +59,7 @@ npm install passport passport-google-oauth20 passport-github2
 
 ## Troubleshooting
 
-- **Route not found**: Make sure backend server is running
+- **Route not found**: Make sure `npm run dev` is running
 - **OAuth error**: Check Client ID and Secret in `.env`
 - **Redirect error**: Verify callback URLs match exactly
 - **No email error**: For GitHub, ensure email is public or scope includes email access

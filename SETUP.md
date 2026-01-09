@@ -1,49 +1,25 @@
 # Sporty Spaces - Full Stack Setup with Authentication
 
-## Backend Setup
+## API/Server Setup (Next.js)
 
-1. Navigate to the backend directory:
-```bash
-cd backend
-```
-
-2. Install dependencies:
+1. Install dependencies:
 ```bash
 npm install
 ```
 
-3. Make sure your `.env` file exists with:
-```
-MONGO_URI=mongodb+srv://akash:akash123@cluster0.fzuggja.mongodb.net/sportyspaces?retryWrites=true&w=majority&appName=Cluster0
-PORT=5000
-JWT_SECRET=your_super_secret_jwt_key_here_make_it_very_long_and_random_for_production_use_123456789
-```
-
-4. Start the backend server:
-```bash
-npm start
+2. Create a `.env.local` file in the project root with at least:
+```env
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_long_random_secret
+JWT_EXPIRE=7d
 ```
 
-The backend will run on http://localhost:5000
-
-## Frontend Setup
-
-1. Navigate to the Client directory:
-```bash
-cd Client
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Start the frontend development server:
+3. Start the development server (Next.js serves both the UI and `/api/*`):
 ```bash
 npm run dev
 ```
 
-The frontend will run on http://localhost:5173
+The app will run on http://localhost:3000
 
 ## 🔐 Authentication Features
 
@@ -81,7 +57,7 @@ The frontend will run on http://localhost:5173
 
 ## 🔒 Security Features
 
-### Backend Security
+### Server Security
 - **Password hashing** with bcrypt (12 salt rounds)
 - **JWT token validation** on protected routes
 - **User ownership verification** for CRUD operations
@@ -160,7 +136,7 @@ The frontend will run on http://localhost:5173
 
 ## 🚀 Usage Instructions
 
-1. **Start both backend and frontend servers**
+1. **Start the app** (`npm run dev`)
 2. **Register a new account** or login with existing credentials
 3. **Browse playgrounds** on the home page
 4. **Add your spaces** when logged in
