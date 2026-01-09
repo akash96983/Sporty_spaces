@@ -52,7 +52,6 @@ export async function GET(request: Request, context: { params: Promise<Params> }
 // PUT /api/reviews/:reviewId
 export async function PUT(request: Request, context: { params: Promise<Params> }) {
   try {
-    await connectDB();
     const authUser = await requireUser(request);
 
     const { id: reviewId } = await context.params;
@@ -88,7 +87,6 @@ export async function PUT(request: Request, context: { params: Promise<Params> }
 // DELETE /api/reviews/:reviewId
 export async function DELETE(request: Request, context: { params: Promise<Params> }) {
   try {
-    await connectDB();
     const authUser = await requireUser(request);
 
     const { id: reviewId } = await context.params;

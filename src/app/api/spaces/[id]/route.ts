@@ -30,7 +30,6 @@ export async function GET(request: Request, context: { params: Promise<Params> }
 
 export async function PUT(request: Request, context: { params: Promise<Params> }) {
   try {
-    await connectDB();
     const authUser = await requireUser(request);
 
     const { id } = await context.params;
@@ -63,7 +62,6 @@ export async function PUT(request: Request, context: { params: Promise<Params> }
 
 export async function DELETE(request: Request, context: { params: Promise<Params> }) {
   try {
-    await connectDB();
     const authUser = await requireUser(request);
 
     const { id } = await context.params;

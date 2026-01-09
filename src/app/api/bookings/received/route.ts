@@ -1,4 +1,3 @@
-import { connectDB } from '@/server/db';
 import Booking from '@/server/models/Booking';
 import Space from '@/server/models/Space';
 import { requireUser } from '@/server/auth';
@@ -13,7 +12,6 @@ export async function OPTIONS(request: Request) {
 
 export async function GET(request: Request) {
   try {
-    await connectDB();
     const authUser = await requireUser(request);
 
     const ownedSpaces: any[] = await Space.find({ owner: authUser.id }).select('_id');

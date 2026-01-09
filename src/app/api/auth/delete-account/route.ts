@@ -1,4 +1,3 @@
-import { connectDB } from '@/server/db';
 import { requireUser } from '@/server/auth';
 import Space from '@/server/models/Space';
 import Booking from '@/server/models/Booking';
@@ -14,8 +13,6 @@ export async function OPTIONS(request: Request) {
 
 export async function DELETE(request: Request) {
   try {
-    await connectDB();
-
     const authUser = await requireUser(request);
 
     const userSpaces: any[] = await Space.find({ owner: authUser.id });

@@ -6,22 +6,22 @@ import { corsPreflight } from '@/server/cors';
 
 export const runtime = 'nodejs';
 
-function getFrontendUrl(): string {
-  return process.env.FRONTEND_URL || 'http://localhost:3000';
+function getBaseUrl(request: Request): string {
+  const configured = process.env.FRONTEND_URL?.replace(/\/$/, '');
+  if (configured) {
+    return configured;
+  }
+  return new URL(request.url).origin;
 }
 
-function getGitHubCallbackUrl(): string {
-  const frontendUrl = process.env.FRONTEND_URL?.replace(/\/$/, '');
-  if (frontendUrl) {
-    return `${frontendUrl}/api/auth/github/callback`;
-  }
+function getGitHubCallbackUrl(request: Request): string {
   if (process.env.GITHUB_CALLBACK_URL) {
     return process.env.GITHUB_CALLBACK_URL;
   }
   if (process.env.BACKEND_URL) {
     return `${process.env.BACKEND_URL.replace(/\/$/, '')}/api/auth/github/callback`;
   }
-  return 'http://localhost:3000/api/auth/github/callback';
+  return `${getBaseUrl(request)}/api/auth/github/callback`;
 }
 
 export async function OPTIONS(request: Request) {
@@ -29,7 +29,7 @@ export async function OPTIONS(request: Request) {
 }
 
 export async function GET(request: Request) {
-  const frontendURL = getFrontendUrl();
+  const frontendURL = getBaseUrl(request);
 
   try {
     const url = new URL(request.url);
@@ -56,7 +56,7 @@ export async function GET(request: Request) {
         client_id: clientId,
         client_secret: clientSecret,
         code,
-        redirect_uri: getGitHubCallbackUrl(),
+        redirect_uri: getGitHubCallbackUrl(request),
       }),
     });
 
@@ -131,7 +131,7 @@ export async function GET(request: Request) {
 
     res.cookies.set('token', jwtToken, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60,
       path: '/',
@@ -139,7 +139,7 @@ export async function GET(request: Request) {
 
     res.cookies.set('token_client', 'authenticated', {
       httpOnly: false,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60,
       path: '/',

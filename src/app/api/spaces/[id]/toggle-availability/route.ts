@@ -1,4 +1,3 @@
-import { connectDB } from '@/server/db';
 import Space from '@/server/models/Space';
 import { requireUser } from '@/server/auth';
 import { corsPreflight } from '@/server/cors';
@@ -14,7 +13,6 @@ export async function OPTIONS(request: Request) {
 
 export async function PATCH(request: Request, context: { params: Promise<Params> }) {
   try {
-    await connectDB();
     const authUser = await requireUser(request);
 
     const { id } = await context.params;

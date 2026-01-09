@@ -32,7 +32,6 @@ export async function GET(request: Request) {
 // POST /api/spaces
 export async function POST(request: Request) {
   try {
-    await connectDB();
     const authUser = await requireUser(request);
 
     const body = await request.json();

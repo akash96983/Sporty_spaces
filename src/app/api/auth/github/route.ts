@@ -3,18 +3,22 @@ import { corsPreflight } from '@/server/cors';
 
 export const runtime = 'nodejs';
 
-function getGitHubCallbackUrl(): string {
-  const frontendUrl = process.env.FRONTEND_URL?.replace(/\/$/, '');
-  if (frontendUrl) {
-    return `${frontendUrl}/api/auth/github/callback`;
+function getBaseUrl(request: Request): string {
+  const configured = process.env.FRONTEND_URL?.replace(/\/$/, '');
+  if (configured) {
+    return configured;
   }
+  return new URL(request.url).origin;
+}
+
+function getGitHubCallbackUrl(request: Request): string {
   if (process.env.GITHUB_CALLBACK_URL) {
     return process.env.GITHUB_CALLBACK_URL;
   }
   if (process.env.BACKEND_URL) {
     return `${process.env.BACKEND_URL.replace(/\/$/, '')}/api/auth/github/callback`;
   }
-  return 'http://localhost:3000/api/auth/github/callback';
+  return `${getBaseUrl(request)}/api/auth/github/callback`;
 }
 
 export async function OPTIONS(request: Request) {
@@ -27,7 +31,7 @@ export async function GET(request: Request) {
     return NextResponse.redirect(new URL('/login?error=oauth_error', request.url));
   }
 
-  const callbackUrl = getGitHubCallbackUrl();
+  const callbackUrl = getGitHubCallbackUrl(request);
 
   const url = new URL('https://github.com/login/oauth/authorize');
   url.searchParams.set('client_id', clientId);

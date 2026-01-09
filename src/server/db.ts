@@ -23,11 +23,21 @@ export async function connectDB(): Promise<typeof mongoose> {
   }
 
   if (!process.env.MONGODB_URI) {
-    throw new Error('MONGODB_URI is not set');
+    const err: any = new Error('MONGODB_URI is not set');
+    err.status = 500;
+    throw err;
   }
 
   if (!globalCache.promise) {
-    globalCache.promise = mongoose.connect(process.env.MONGODB_URI).then((m) => m);
+    globalCache.promise = mongoose
+      .connect(process.env.MONGODB_URI)
+      .then((m) => m)
+      .catch((error) => {
+        console.error('MongoDB connection error:', error);
+        const err: any = new Error('Database connection failed');
+        err.status = 500;
+        throw err;
+      });
   }
 
   globalCache.conn = await globalCache.promise;

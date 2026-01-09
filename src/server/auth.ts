@@ -63,29 +63,28 @@ export async function requireUser(request: Request): Promise<AuthUser> {
     throw err;
   }
 
+  let decoded: any;
   try {
-    const decoded: any = jwt.verify(token, process.env.JWT_SECRET);
-
-    await connectDB();
-
-    const userDoc: any = await User.findById(decoded.id).select('-password');
-    if (!userDoc) {
-      const err: any = new Error('User not found');
-      err.status = 401;
-      throw err;
-    }
-
-    userDoc.id = userDoc._id;
-
-    return {
-      id: String(userDoc._id),
-      _id: String(userDoc._id),
-      username: userDoc.username,
-      email: userDoc.email,
-    };
-  } catch (error) {
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
+  } catch {
     const err: any = new Error('Invalid or expired token');
     err.status = 401;
     throw err;
   }
+
+  await connectDB();
+
+  const userDoc: any = await User.findById(decoded.id).select('-password');
+  if (!userDoc) {
+    const err: any = new Error('User not found');
+    err.status = 401;
+    throw err;
+  }
+
+  return {
+    id: String(userDoc._id),
+    _id: String(userDoc._id),
+    username: userDoc.username,
+    email: userDoc.email,
+  };
 }

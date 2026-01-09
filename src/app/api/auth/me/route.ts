@@ -1,5 +1,3 @@
-import { connectDB } from '@/server/db';
-import User from '@/server/models/User';
 import { requireUser } from '@/server/auth';
 import { corsPreflight } from '@/server/cors';
 import { errorJson, json } from '@/server/http';
@@ -12,17 +10,14 @@ export async function OPTIONS(request: Request) {
 
 export async function GET(request: Request) {
   try {
-    await connectDB();
     const authUser = await requireUser(request);
-
-    const user: any = await User.findById(authUser.id);
 
     return json(request, {
       success: true,
       user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
+        id: authUser.id,
+        username: authUser.username,
+        email: authUser.email,
       },
     });
   } catch (error: any) {

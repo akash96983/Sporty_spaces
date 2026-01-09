@@ -1,4 +1,3 @@
-import { connectDB } from '@/server/db';
 import Booking from '@/server/models/Booking';
 import Space from '@/server/models/Space';
 import { requireUser } from '@/server/auth';
@@ -14,7 +13,6 @@ export async function OPTIONS(request: Request) {
 // POST /api/bookings
 export async function POST(request: Request) {
   try {
-    await connectDB();
     const authUser = await requireUser(request);
 
     const { spaceId, date, startTime, endTime, contactNumber, notes } = await request.json();

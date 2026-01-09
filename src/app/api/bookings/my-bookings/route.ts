@@ -1,4 +1,3 @@
-import { connectDB } from '@/server/db';
 import Booking from '@/server/models/Booking';
 import { requireUser } from '@/server/auth';
 import { corsPreflight } from '@/server/cors';
@@ -12,7 +11,6 @@ export async function OPTIONS(request: Request) {
 
 export async function GET(request: Request) {
   try {
-    await connectDB();
     const authUser = await requireUser(request);
 
     const bookings = await Booking.find({

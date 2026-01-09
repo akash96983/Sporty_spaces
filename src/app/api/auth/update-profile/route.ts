@@ -1,4 +1,3 @@
-import { connectDB } from '@/server/db';
 import User from '@/server/models/User';
 import { requireUser } from '@/server/auth';
 import { corsPreflight } from '@/server/cors';
@@ -12,8 +11,6 @@ export async function OPTIONS(request: Request) {
 
 export async function PUT(request: Request) {
   try {
-    await connectDB();
-
     const authUser = await requireUser(request);
     const { username, email } = await request.json();
 

@@ -1,4 +1,3 @@
-import { connectDB } from '@/server/db';
 import Review from '@/server/models/Review';
 import { requireUser } from '@/server/auth';
 import { corsPreflight } from '@/server/cors';
@@ -13,7 +12,6 @@ export async function OPTIONS(request: Request) {
 // POST /api/reviews
 export async function POST(request: Request) {
   try {
-    await connectDB();
     const authUser = await requireUser(request);
 
     const { spaceId, rating, comment } = await request.json();

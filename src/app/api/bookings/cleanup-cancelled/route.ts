@@ -1,4 +1,3 @@
-import { connectDB } from '@/server/db';
 import Booking from '@/server/models/Booking';
 import { requireUser } from '@/server/auth';
 import { corsPreflight } from '@/server/cors';
@@ -12,7 +11,6 @@ export async function OPTIONS(request: Request) {
 
 export async function DELETE(request: Request) {
   try {
-    await connectDB();
     await requireUser(request);
 
     const result: any = await Booking.deleteMany({ status: 'cancelled' });

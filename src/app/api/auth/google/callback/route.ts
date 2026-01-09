@@ -6,22 +6,22 @@ import { corsPreflight } from '@/server/cors';
 
 export const runtime = 'nodejs';
 
-function getFrontendUrl(): string {
-  return process.env.FRONTEND_URL || 'http://localhost:3000';
+function getBaseUrl(request: Request): string {
+  const configured = process.env.FRONTEND_URL?.replace(/\/$/, '');
+  if (configured) {
+    return configured;
+  }
+  return new URL(request.url).origin;
 }
 
-function getGoogleCallbackUrl(): string {
-  const frontendUrl = process.env.FRONTEND_URL?.replace(/\/$/, '');
-  if (frontendUrl) {
-    return `${frontendUrl}/api/auth/google/callback`;
-  }
+function getGoogleCallbackUrl(request: Request): string {
   if (process.env.GOOGLE_CALLBACK_URL) {
     return process.env.GOOGLE_CALLBACK_URL;
   }
   if (process.env.BACKEND_URL) {
     return `${process.env.BACKEND_URL.replace(/\/$/, '')}/api/auth/google/callback`;
   }
-  return 'http://localhost:3000/api/auth/google/callback';
+  return `${getBaseUrl(request)}/api/auth/google/callback`;
 }
 
 export async function OPTIONS(request: Request) {
@@ -29,7 +29,7 @@ export async function OPTIONS(request: Request) {
 }
 
 export async function GET(request: Request) {
-  const frontendURL = getFrontendUrl();
+  const frontendURL = getBaseUrl(request);
 
   try {
     const url = new URL(request.url);
@@ -53,7 +53,7 @@ export async function GET(request: Request) {
         code,
         client_id: clientId,
         client_secret: clientSecret,
-        redirect_uri: getGoogleCallbackUrl(),
+        redirect_uri: getGoogleCallbackUrl(request),
         grant_type: 'authorization_code',
       }),
     });
@@ -109,7 +109,7 @@ export async function GET(request: Request) {
 
     res.cookies.set('token', jwtToken, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       maxAge: 7 * 24 * 60 * 60,
       path: '/',
@@ -117,7 +117,7 @@ export async function GET(request: Request) {
 
     res.cookies.set('token_client', 'authenticated', {
       httpOnly: false,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       maxAge: 7 * 24 * 60 * 60,
       path: '/',
