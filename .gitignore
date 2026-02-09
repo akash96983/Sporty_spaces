@@ -49,6 +49,13 @@ next-env.d.ts
 .DS_Store
 Thumbs.db
 
+# Editor-specific
+*.swp
+*.swo
+*~
+.vscode/settings.json
+.vscode/launch.json
+
 # Logs
 logs
 *.log
